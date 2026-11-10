@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Here I Am</title>
+<meta name="description" content="Here I Am alerts the operator when a handheld is left behind in the dark or idle, and stays quiet while another Here I Am device is nearby.">
+<style>
+  :root {
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --texto: #1d2430;
+    --suave: #5b6675;
+    --teal: #014956;
+    --teal-2: #02707f;
+    --amarelo: #ffd740;
+    --borda: #dfe4ea;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--texto);
+    background: var(--bg);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+  a { color: var(--teal-2); }
+  header {
+    position: sticky; top: 0; z-index: 10;
+    background: var(--teal); color: #fff;
+  }
+  .barra {
+    max-width: 1080px; margin: 0 auto; padding: 12px 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .marca { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; text-decoration: none; color: #fff; }
+  .marca img { width: 36px; height: 36px; border-radius: 9px; }
+  nav { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  nav a { color: #fff; text-decoration: none; font-size: 14px; opacity: .9; }
+  nav a:hover { opacity: 1; text-decoration: underline; }
+  .idiomas { display: flex; gap: 4px; }
+  .idiomas button {
+    background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.5);
+    border-radius: 6px; padding: 4px 9px; font-size: 13px; cursor: pointer;
+  }
+  .idiomas button.ativo { background: #fff; color: var(--teal); border-color: #fff; font-weight: 700; }
+
+  .hero {
+    background: linear-gradient(160deg, var(--teal) 0%, var(--teal-2) 100%);
+    color: #fff; padding: 56px 16px 64px;
+  }
+  .hero-conteudo {
+    max-width: 1080px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: center;
+  }
+  .hero h1 { font-size: 44px; line-height: 1.15; margin: 0 0 12px; }
+  .hero p.lead { font-size: 19px; opacity: .95; margin: 0 0 24px; }
+  .botoes { display: flex; gap: 12px; flex-wrap: wrap; }
+  .botao {
+    display: inline-block; padding: 14px 22px; border-radius: 10px;
+    font-weight: 700; text-decoration: none; font-size: 16px;
+  }
+  .botao.primario { background: var(--amarelo); color: #1d2430; }
+  .botao.secundario { border: 2px solid #fff; color: #fff; }
+  .versao { margin-top: 14px; font-size: 14px; opacity: .85; }
+  .hero-figura { text-align: center; }
+  .hero-figura img { width: 240px; max-width: 70%; height: auto; filter: drop-shadow(0 12px 24px rgba(0,0,0,.25)); }
+
+  section { padding: 56px 16px; }
+  section.clara { background: var(--card); }
+  .container { max-width: 1080px; margin: 0 auto; }
+  h2 { font-size: 32px; margin: 0 0 8px; color: var(--teal); }
+  .subtitulo { color: var(--suave); margin: 0 0 32px; font-size: 17px; }
+
+  .passos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; counter-reset: passo; }
+  .passo {
+    background: var(--bg); border-radius: 14px; padding: 22px; position: relative;
+    border: 1px solid var(--borda);
+  }
+  .passo::before {
+    counter-increment: passo; content: counter(passo);
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--teal); color: #fff; font-weight: 700; margin-bottom: 12px;
+  }
+  .passo h3 { margin: 0 0 6px; font-size: 18px; }
+  .passo p { margin: 0; color: var(--suave); font-size: 15px; }
+
+  .grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .cartao {
+    background: var(--card); border: 1px solid var(--borda); border-radius: 14px; padding: 22px;
+  }
+  .cartao h3 { margin: 0 0 8px; font-size: 18px; color: var(--teal); }
+  .cartao p { margin: 0; color: var(--suave); font-size: 15px; }
+  .selo {
+    display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
+    background: #fff4c2; color: #6b5300; margin-bottom: 8px;
+  }
+
+  .aviso {
+    background: #fff8e1; border-left: 4px solid var(--amarelo); padding: 14px 18px; border-radius: 8px;
+    margin: 24px 0 0; font-size: 15px; color: #5a4a00;
+  }
+
+  .requisitos ul, .lista ul { padding-left: 20px; margin: 0; }
+  .requisitos li, .lista li { margin-bottom: 8px; }
+  .duas { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+
+  .download-bloco {
+    background: var(--teal); color: #fff; border-radius: 16px; padding: 36px 28px; text-align: center;
+  }
+  .download-bloco h2 { color: #fff; }
+  .download-bloco p { opacity: .92; margin: 0 0 22px; }
+
+  .contato { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .contato a.cartao { text-decoration: none; color: var(--texto); display: block; }
+  .contato a.cartao:hover { border-color: var(--teal-2); }
+  .contato strong { display: block; color: var(--teal); margin-bottom: 4px; }
+
+  footer { background: #0b2a31; color: #cfd8dc; padding: 28px 16px; text-align: center; font-size: 14px; }
+  footer a { color: #fff; }
+
+  @media (max-width: 900px) {
+    .passos { grid-template-columns: repeat(2, 1fr); }
+    .grade { grid-template-columns: repeat(2, 1fr); }
+    .hero-conteudo { grid-template-columns: 1fr; text-align: center; }
+    .botoes { justify-content: center; }
+    .hero-figura { order: -1; }
+  }
+  @media (max-width: 640px) {
+    .barra { flex-direction: column; align-items: stretch; }
+    nav { justify-content: center; gap: 10px; }
+    .idiomas { justify-content: center; }
+    .hero { padding: 36px 16px 44px; }
+    .hero h1 { font-size: 32px; }
+    .hero p.lead { font-size: 17px; }
+    h2 { font-size: 26px; }
+    section { padding: 40px 16px; }
+    .passos, .grade, .duas, .contato { grid-template-columns: 1fr; }
+    .hero-figura img { width: 170px; }
+    .botao { width: 100%; text-align: center; }
+    .botoes .botao { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="barra">
+    <a class="marca" href="#topo"><img src="icon.png" alt="" onerror="this.style.display='none'"><span>Here I Am</span></a>
+    <nav>
+      <a href="#como-funciona" data-i18n="nav_como">How it works</a>
+      <a href="#recursos" data-i18n="nav_recursos">Features</a>
+      <a href="#instalacao" data-i18n="nav_instalacao">Install</a>
+      <a href="#contato" data-i18n="nav_contato">Contact</a>
+    </nav>
+    <div class="idiomas" role="group" aria-label="Language">
+      <button type="button" data-lang="en" class="ativo">EN</button>
+      <button type="button" data-lang="pt">PT</button>
+      <button type="button" data-lang="es">ES</button>
+    </div>
+  </div>
+</header>
+
+<div id="topo"></div>
+
+<div class="hero">
+  <div class="hero-conteudo">
+    <div>
+      <h1 data-i18n="hero_titulo">Never leave a handheld behind again</h1>
+      <p class="lead" data-i18n="hero_lead">Here I Am detects a handheld that was forgotten in the dark or left idle, and sounds an alarm so the operator can retrieve it. While another Here I Am device is nearby, the alarm stays quiet.</p>
+      <div class="botoes">
+        <a class="botao primario" href="downloads/Here-I-Am.apk" data-i18n="hero_baixar">Download free trial version (APK)</a>
+        <a class="botao secundario" href="#como-funciona" data-i18n="hero_saiba">See how it works</a>
+      </div>
+      <p class="versao"><span data-i18n="hero_versao">Free trial version</span>: 1.12.38 · Android 8.0 or later</p>
+    </div>
+    <div class="hero-figura">
+      <img src="icon.png" alt="Here I Am icon" onerror="this.style.display='none'">
+    </div>
+  </div>
+</div>
+
+<section id="como-funciona" class="clara">
+  <div class="container">
+    <h2 data-i18n="como_titulo">How it works</h2>
+    <p class="subtitulo" data-i18n="como_sub">A simple sequence, checked again every time the handheld is idle.</p>
+    <div class="passos">
+      <div class="passo">
+        <h3 data-i18n="p1_t">Idle with the screen off</h3>
+        <p data-i18n="p1_d">After the screen has been off for a set time, Here I Am starts checking the environment.</p>
+      </div>
+      <div class="passo">
+        <h3 data-i18n="p2_t">Light check</h3>
+        <p data-i18n="p2_d">If the ambient light stays below the threshold for several readings in a row, the device is probably inside a pallet sleeve or a closed place.</p>
+      </div>
+      <div class="passo">
+        <h3 data-i18n="p3_t">Search for neighbors</h3>
+        <p data-i18n="p3_d">The app looks for another Here I Am device nearby by Bluetooth Low Energy and/or sound, for a set search window.</p>
+      </div>
+      <div class="passo">
+        <h3 data-i18n="p4_t">Alarm or silence</h3>
+        <p data-i18n="p4_d">If a neighbor is found, the device waits and searches again. If none is found, the alarm sounds with vibration until the operator picks the device up.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="recursos">
+  <div class="container">
+    <h2 data-i18n="rec_titulo">Features</h2>
+    <p class="subtitulo" data-i18n="rec_sub">Everything the app does, and the settings you can change on each device.</p>
+    <div class="grade">
+      <div class="cartao">
+        <span class="selo" data-i18n="sel_base">Core</span>
+        <h3 data-i18n="f1_t">Dark detection with the screen off</h3>
+        <p data-i18n="f1_d">Reads the ambient light sensor and triggers the search when the light falls below the threshold for a set number of readings. Threshold, reading interval and screen-off time are all configurable.</p>
+      </div>
+      <div class="cartao">
+        <span class="selo" data-i18n="sel_base">Core</span>
+        <h3 data-i18n="f2_t">Neighbor detection by Bluetooth (BLE)</h3>
+        <p data-i18n="f2_d">Each device advertises an identifier and looks for the others. You set the signal strength (dBm) that counts as nearby, how long a sighting stays valid, the scan mode and the advertising power. A live list shows which devices are seen as neighbors.</p>
+      </div>
+      <div class="cartao">
+        <span class="selo" data-i18n="sel_proto">Prototype</span>
+        <h3 data-i18n="f3_t">Neighbor detection by sound</h3>
+        <p data-i18n="f3_d">As an alternative to Bluetooth, each device plays a short tone sequence and listens for others at a configurable frequency and volume.</p>
+      </div>
+      <div class="cartao">
+        <span class="selo" data-i18n="sel_base">Core</span>
+        <h3 data-i18n="f4_t">Screen on, but no movement</h3>
+        <p data-i18n="f4_d">Detects a handheld that stays with the screen on, dark and without movement for a set number of minutes. The accelerometer defines what counts as still. Movement stops this alarm.</p>
+      </div>
+      <div class="cartao">
+        <span class="selo" data-i18n="sel_opt">Optional</span>
+        <h3 data-i18n="f5_t">Fall detection</h3>
+        <p data-i18n="f5_d">Uses the accelerometer to detect a fall (free fall followed by impact, or impact only). The threshold can be calibrated with a simulated fall. Optionally, the alarm can only be stopped with a PIN.</p>
+      </div>
+      <div class="cartao">
+        <span class="selo" data-i18n="sel_base">Core</span>
+        <h3 data-i18n="f6_t">Devices without a light sensor</h3>
+        <p data-i18n="f6_d">If the device has no light sensor, the app says so and uses only the idle time with the screen locked as the trigger. The time is configurable, so long idle periods can be allowed.</p>
+      </div>
+      <div class="cartao">
+        <span class="selo" data-i18n="sel_base">Core</span>
+        <h3 data-i18n="f7_t">Alarm sounds and vibration</h3>
+        <p data-i18n="f7_d">Pick one or more alarm sounds, or add your own audio files. The alarm can sound at maximum volume and vibrate, and you can turn the sound off and keep only the vibration.</p>
+      </div>
+      <div class="cartao">
+        <span class="selo" data-i18n="sel_base">Core</span>
+        <h3 data-i18n="f8_t">Permissions check</h3>
+        <p data-i18n="f8_d">A permissions screen shows what is OK and what is missing: battery optimization, Bluetooth, location for BLE, microphone, notifications and the light sensor. It also shows live charts for light, microphone and movement, with minimum, maximum and average values.</p>
+      </div>
+      <div class="cartao">
+        <span class="selo" data-i18n="sel_base">Core</span>
+        <h3 data-i18n="f9_t">Event log</h3>
+        <p data-i18n="f9_d">Every event is recorded in a CSV file on the device: alarms, searches, neighbors found, screen changes and status. You can view a summary in the app and share the file. The file is capped at 50 MB; when it is full, the oldest lines are removed.</p>
+      </div>
+      <div class="cartao">
+        <span class="selo" data-i18n="sel_base">Core</span>
+        <h3 data-i18n="f10_t">Three languages</h3>
+        <p data-i18n="f10_d">The app is available in English, Portuguese and Spanish, and the language can be changed in the settings.</p>
+      </div>
+    </div>
+    <div class="aviso" data-i18n="aviso">This is a version under testing. Test it on your own devices before relying on it, and confirm that the alarm, sound and neighbor detection work as expected in your environment.</div>
+  </div>
+</section>
+
+<section class="clara">
+  <div class="container duas">
+    <div class="requisitos">
+      <h2 data-i18n="req_titulo">Requirements</h2>
+      <ul>
+        <li data-i18n="req1">Android 8.0 (Oreo) or later.</li>
+        <li data-i18n="req2">Bluetooth Low Energy for neighbor detection by BLE.</li>
+        <li data-i18n="req3">A light sensor for dark detection. Without one, the app uses the idle-time trigger.</li>
+        <li data-i18n="req4">Permissions for Bluetooth (or location on Android 8 to 11), microphone for sound detection, and notifications. The app asks for each one when needed.</li>
+        <li data-i18n="req5">Battery optimization turned off for the app, so the monitoring keeps running in the background.</li>
+      </ul>
+    </div>
+    <div class="lista">
+      <h2 data-i18n="priv_titulo">Your data</h2>
+      <ul>
+        <li data-i18n="priv1">The event log and settings are stored on the device.</li>
+        <li data-i18n="priv2">The app does not record keyboard input or take screenshots.</li>
+        <li data-i18n="priv3">You can clear the settings at any time with "Restore app defaults" on the About screen.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="instalacao">
+  <div class="container">
+    <h2 data-i18n="inst_titulo">Installation</h2>
+    <p class="subtitulo" data-i18n="inst_sub">Install the APK directly on the device. It is not available in the Play Store.</p>
+    <div class="passos">
+      <div class="passo">
+        <h3 data-i18n="i1_t">Download</h3>
+        <p data-i18n="i1_d">Open this page on the device and tap the download button.</p>
+      </div>
+      <div class="passo">
+        <h3 data-i18n="i2_t">Allow the install</h3>
+        <p data-i18n="i2_d">Android asks you to allow installing apps from this source. Accept only for this download.</p>
+      </div>
+      <div class="passo">
+        <h3 data-i18n="i3_t">Open and install</h3>
+        <p data-i18n="i3_d">Open the downloaded file in the Downloads app and confirm the installation.</p>
+      </div>
+      <div class="passo">
+        <h3 data-i18n="i4_t">Grant permissions</h3>
+        <p data-i18n="i4_d">Open "App permissions" in the app and allow everything marked as missing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contato" class="clara">
+  <div class="container">
+    <div class="download-bloco">
+      <h2 data-i18n="dl_titulo">Ready to try it?</h2>
+      <p data-i18n="dl_sub">Download the latest APK and test it on your handhelds.</p>
+      <a class="botao primario" href="downloads/Here-I-Am.apk" data-i18n="hero_baixar">Download free trial version (APK)</a>
+    </div>
+    <h2 style="margin-top:48px" data-i18n="cont_titulo">Contact</h2>
+    <p class="subtitulo" data-i18n="cont_sub">Questions, feedback or support requests:</p>
+    <div class="contato">
+      <a class="cartao" href="mailto:hugofga@gmail.com">
+        <strong data-i18n="cont_email">Email</strong>
+        <span>hugofga@gmail.com</span>
+      </a>
+      <a class="cartao" href="https://wa.me/5521983690327" target="_blank" rel="noopener">
+        <strong>WhatsApp</strong>
+        <span>+55 21 98369 0327</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Here I Am · <span data-i18n="rodape">Built for handheld teams who need to find devices fast.</span></p>
+  <p><a href="#topo" data-i18n="voltar">Back to top</a></p>
+</footer>
+
+<script>
+  const T = {
+    en: {
+      nav_como: "How it works", nav_recursos: "Features", nav_instalacao: "Install", nav_contato: "Contact",
+      hero_titulo: "Never leave a handheld behind again",
+      hero_lead: "Here I Am detects a handheld that was forgotten in the dark or left idle, and sounds an alarm so the operator can retrieve it. While another Here I Am device is nearby, the alarm stays quiet.",
+      hero_baixar: "Download free trial version (APK)", hero_saiba: "See how it works", hero_versao: "Free trial version (7 days)",
+      como_titulo: "How it works", como_sub: "A simple sequence, checked again every time the handheld is idle.",
+      p1_t: "Idle with the screen off", p1_d: "After the screen has been off for a set time, Here I Am starts checking the environment.",
+      p2_t: "Light check", p2_d: "If the ambient light stays below the threshold for several readings in a row, the device is probably inside a pallet sleeve or a closed place.",
+      p3_t: "Search for neighbors", p3_d: "The app looks for another Here I Am device nearby by Bluetooth Low Energy and/or sound, for a set search window.",
+      p4_t: "Alarm or silence", p4_d: "If a neighbor is found, the device waits and searches again. If none is found, the alarm sounds with vibration until the operator picks the device up.",
+      rec_titulo: "Features", rec_sub: "Everything the app does, and the settings you can change on each device.",
+      sel_base: "Core", sel_proto: "Prototype", sel_opt: "Optional",
+      f1_t: "Dark detection with the screen off", f1_d: "Reads the ambient light sensor and triggers the search when the light falls below the threshold for a set number of readings. Threshold, reading interval and screen-off time are all configurable.",
+      f2_t: "Neighbor detection by Bluetooth (BLE)", f2_d: "Each device advertises an identifier and looks for the others. You set the signal strength (dBm) that counts as nearby, how long a sighting stays valid, the scan mode and the advertising power. A live list shows which devices are seen as neighbors.",
+      f3_t: "Neighbor detection by sound", f3_d: "As an alternative to Bluetooth, each device plays a short tone sequence and listens for others at a configurable frequency and volume.",
+      f4_t: "Screen on, but no movement", f4_d: "Detects a handheld that stays with the screen on, dark and without movement for a set number of minutes. The accelerometer defines what counts as still. Movement stops this alarm.",
+      f5_t: "Fall detection", f5_d: "Uses the accelerometer to detect a fall (free fall followed by impact, or impact only). The threshold can be calibrated with a simulated fall. Optionally, the alarm can only be stopped with a PIN.",
+      f6_t: "Devices without a light sensor", f6_d: "If the device has no light sensor, the app says so and uses only the idle time with the screen locked as the trigger. The time is configurable, so long idle periods can be allowed.",
+      f7_t: "Alarm sounds and vibration", f7_d: "Pick one or more alarm sounds, or add your own audio files. The alarm can sound at maximum volume and vibrate, and you can turn the sound off and keep only the vibration.",
+      f8_t: "Permissions check", f8_d: "A permissions screen shows what is OK and what is missing: battery optimization, Bluetooth, location for BLE, microphone, notifications and the light sensor. It also shows live charts for light, microphone and movement, with minimum, maximum and average values.",
+      f9_t: "Event log", f9_d: "Every event is recorded in a CSV file on the device: alarms, searches, neighbors found, screen changes and status. You can view a summary in the app and share the file. The file is capped at 50 MB; when it is full, the oldest lines are removed.",
+      f10_t: "Three languages", f10_d: "The app is available in English, Portuguese and Spanish, and the language can be changed in the settings.",
+      aviso: "This is a version under testing. Test it on your own devices before relying on it, and confirm that the alarm, sound and neighbor detection work as expected in your environment.",
+      req_titulo: "Requirements",
+      req1: "Android 8.0 (Oreo) or later.", req2: "Bluetooth Low Energy for neighbor detection by BLE.", req3: "A light sensor for dark detection. Without one, the app uses the idle-time trigger.", req4: "Permissions for Bluetooth (or location on Android 8 to 11), microphone for sound detection, and notifications. The app asks for each one when needed.", req5: "Battery optimization turned off for the app, so the monitoring keeps running in the background.",
+      priv_titulo: "Your data", priv1: "The event log and settings are stored on the device.", priv2: "The app does not record keyboard input or take screenshots.", priv3: "You can clear the settings at any time with \"Restore app defaults\" on the About screen.",
+      inst_titulo: "Installation", inst_sub: "Install the APK directly on the device. It is not available in the Play Store. The trial lasts 7 days. After that, the app asks for a license for the device: to buy one, use the contact details below.",
+      i1_t: "Download", i1_d: "Open this page on the device and tap the download button.",
+      i2_t: "Allow the install", i2_d: "Android asks you to allow installing apps from this source. Accept only for this download.",
+      i3_t: "Open and install", i3_d: "Open the downloaded file in the Downloads app and confirm the installation.",
+      i4_t: "Grant permissions", i4_d: "Open \"App permissions\" in the app and allow everything marked as missing.",
+      dl_titulo: "Ready to try it?", dl_sub: "Download the latest APK and test it on your handhelds.",
+      cont_titulo: "Contact", cont_sub: "Questions, feedback or support requests:", cont_email: "Email",
+      rodape: "Built for handheld teams who need to find devices fast.", voltar: "Back to top"
+    },
+    pt: {
+      nav_como: "Como funciona", nav_recursos: "Recursos", nav_instalacao: "Instalação", nav_contato: "Contato",
+      hero_titulo: "Nunca mais deixe um handheld para trás",
+      hero_lead: "O Here I Am detecta um handheld esquecido no escuro ou parado, e toca um alarme para o operador localizá-lo. Enquanto outro aparelho com o Here I Am estiver por perto, o alarme fica em silêncio.",
+      hero_baixar: "Baixar versão trial gratuita (APK)", hero_saiba: "Veja como funciona", hero_versao: "Versão trial gratuita (7 dias)",
+      como_titulo: "Como funciona", como_sub: "Uma sequência simples, verificada de novo sempre que o handheld fica parado.",
+      p1_t: "Parado com a tela desligada", p1_d: "Depois que a tela fica desligada por um tempo definido, o Here I Am começa a verificar o ambiente.",
+      p2_t: "Verificação de luz", p2_d: "Se a luz ambiente ficar abaixo do limiar em várias leituras seguidas, o aparelho provavelmente está dentro de uma manga palete ou em um lugar fechado.",
+      p3_t: "Busca por vizinhos", p3_d: "O app procura outro aparelho com o Here I Am por perto, por Bluetooth Low Energy e/ou som, durante uma janela de busca definida.",
+      p4_t: "Alarme ou silêncio", p4_d: "Se um vizinho for encontrado, o aparelho espera e busca de novo. Se ninguém for encontrado, o alarme toca com vibração até o operador pegar o aparelho.",
+      rec_titulo: "Recursos", rec_sub: "Tudo o que o app faz, e as configurações que você pode ajustar em cada aparelho.",
+      sel_base: "Principal", sel_proto: "Protótipo", sel_opt: "Opcional",
+      f1_t: "Detecção de escuro com a tela desligada", f1_d: "Lê o sensor de luz ambiente e dispara a busca quando a luz fica abaixo do limiar por um número definido de leituras. Limiar, intervalo entre leituras e tempo com a tela desligada são configuráveis.",
+      f2_t: "Vizinhos por Bluetooth (BLE)", f2_d: "Cada aparelho anuncia um identificador e procura os outros. Você define a intensidade do sinal (dBm) que conta como perto, por quanto tempo um sinal visto vale, o modo de busca e a potência do anúncio. Uma lista ao vivo mostra quais aparelhos estão sendo vistos como vizinhos.",
+      f3_t: "Vizinhos por som", f3_d: "Como alternativa ao Bluetooth, cada aparelho emite uma sequência curta de tons e escuta os outros, com frequência e volume configuráveis.",
+      f4_t: "Tela ligada, mas sem movimento", f4_d: "Detecta um handheld que fica com a tela ligada, escuro e sem movimento por um número definido de minutos. O acelerômetro define o que conta como parado. Qualquer movimento encerra esse alarme.",
+      f5_t: "Detecção de queda", f5_d: "Usa o acelerômetro para detectar uma queda (queda livre seguida de impacto, ou só impacto). O limiar pode ser calibrado com uma queda simulada. Opcionalmente, o alarme só pode ser interrompido com um PIN.",
+      f6_t: "Aparelhos sem sensor de luz", f6_d: "Se o aparelho não tiver sensor de luz, o app avisa e usa só o tempo parado com a tela bloqueada como gatilho. O tempo é configurável, então é possível permitir períodos parados mais longos.",
+      f7_t: "Sons do alarme e vibração", f7_d: "Escolha um ou mais sons de alarme, ou adicione seus próprios arquivos de áudio. O alarme pode tocar no volume máximo e vibrar, e você pode desligar o som e manter só a vibração.",
+      f8_t: "Verificação de permissões", f8_d: "Uma tela de permissões mostra o que está OK e o que falta: otimização de bateria, Bluetooth, localização para BLE, microfone, notificações e sensor de luz. Também mostra gráficos ao vivo de luz, microfone e movimento, com valores mínimo, máximo e médio.",
+      f9_t: "Registro de eventos", f9_d: "Cada evento é gravado em um arquivo CSV no aparelho: alarmes, buscas, vizinhos encontrados, mudanças de tela e status. Você pode ver um resumo no app e compartilhar o arquivo. O arquivo tem limite de 50 MB; ao atingir o limite, as linhas mais antigas são removidas.",
+      f10_t: "Três idiomas", f10_d: "O app está disponível em inglês, português e espanhol, e o idioma pode ser trocado nas configurações.",
+      aviso: "Esta é uma versão em teste. Teste nos seus aparelhos antes de depender dela, e confirme que o alarme, o som e a detecção de vizinhos funcionam como esperado no seu ambiente.",
+      req_titulo: "Requisitos",
+      req1: "Android 8.0 (Oreo) ou superior.", req2: "Bluetooth Low Energy para a detecção de vizinhos por BLE.", req3: "Sensor de luz para a detecção de escuro. Sem ele, o app usa o gatilho de tempo parado.", req4: "Permissões de Bluetooth (ou de localização no Android 8 a 11), microfone para a detecção por som e notificações. O app pede cada uma quando precisa.", req5: "Otimização de bateria desligada para o app, para que o monitoramento continue em segundo plano.",
+      priv_titulo: "Seus dados", priv1: "O registro de eventos e as configurações ficam guardados no aparelho.", priv2: "O app não registra o que é digitado no teclado nem tira capturas de tela.", priv3: "Você pode restaurar as configurações a qualquer momento com \"Restaurar padrões do app\" na tela Sobre.",
+      inst_titulo: "Instalação", inst_sub: "Instale o APK diretamente no aparelho. Ele não está disponível na Play Store. A versão de teste dura 7 dias. Depois, o app pede uma licença para o aparelho: para comprar, use os contatos abaixo.",
+      i1_t: "Baixar", i1_d: "Abra esta página no aparelho e toque no botão de download.",
+      i2_t: "Permitir a instalação", i2_d: "O Android pede permissão para instalar apps desta fonte. Aceite só para este download.",
+      i3_t: "Abrir e instalar", i3_d: "Abra o arquivo baixado no app Downloads e confirme a instalação.",
+      i4_t: "Conceder permissões", i4_d: "Abra \"Permissões do APP\" no app e permita tudo o que estiver marcado como faltando.",
+      dl_titulo: "Pronto para testar?", dl_sub: "Baixe o APK mais recente e teste nos seus handhelds.",
+      cont_titulo: "Contato", cont_sub: "Dúvidas, sugestões ou pedidos de suporte:", cont_email: "E-mail",
+      rodape: "Feito para equipes de handhelds que precisam encontrar aparelhos rápido.", voltar: "Voltar ao topo"
+    },
+    es: {
+      nav_como: "Cómo funciona", nav_recursos: "Funciones", nav_instalacao: "Instalación", nav_contato: "Contacto",
+      hero_titulo: "Nunca más dejes un handheld olvidado",
+      hero_lead: "Here I Am detecta un handheld olvidado en la oscuridad o inactivo, y suena una alarma para que el operador lo encuentre. Mientras otro equipo con Here I Am esté cerca, la alarma permanece en silencio.",
+      hero_baixar: "Descargar versión de prueba gratuita (APK)", hero_saiba: "Ver cómo funciona", hero_versao: "Versión de prueba gratuita (7 días)",
+      como_titulo: "Cómo funciona", como_sub: "Una secuencia simple, que se vuelve a verificar cada vez que el handheld queda inactivo.",
+      p1_t: "Inactivo con la pantalla apagada", p1_d: "Después de que la pantalla lleva apagada un tiempo definido, Here I Am empieza a verificar el entorno.",
+      p2_t: "Verificación de luz", p2_d: "Si la luz ambiente se mantiene por debajo del umbral en varias lecturas seguidas, el equipo probablemente está dentro de una manga de pallet o en un lugar cerrado.",
+      p3_t: "Búsqueda de vecinos", p3_d: "La app busca otro equipo con Here I Am cercano, por Bluetooth Low Energy y/o sonido, durante una ventana de búsqueda definida.",
+      p4_t: "Alarma o silencio", p4_d: "Si se encuentra un vecino, el equipo espera y vuelve a buscar. Si no se encuentra a nadie, la alarma suena con vibración hasta que el operador toma el equipo.",
+      rec_titulo: "Funciones", rec_sub: "Todo lo que hace la app, y los ajustes que puedes cambiar en cada equipo.",
+      sel_base: "Principal", sel_proto: "Prototipo", sel_opt: "Opcional",
+      f1_t: "Detección de oscuridad con la pantalla apagada", f1_d: "Lee el sensor de luz ambiente y activa la búsqueda cuando la luz cae por debajo del umbral durante un número definido de lecturas. El umbral, el intervalo entre lecturas y el tiempo con la pantalla apagada son configurables.",
+      f2_t: "Vecinos por Bluetooth (BLE)", f2_d: "Cada equipo anuncia un identificador y busca a los demás. Defines la intensidad de señal (dBm) que cuenta como cercano, cuánto tiempo vale una señal vista, el modo de búsqueda y la potencia del anuncio. Una lista en vivo muestra qué equipos se ven como vecinos.",
+      f3_t: "Vecinos por sonido", f3_d: "Como alternativa al Bluetooth, cada equipo emite una secuencia corta de tonos y escucha a los demás, con frecuencia y volumen configurables.",
+      f4_t: "Pantalla encendida, pero sin movimiento", f4_d: "Detecta un handheld que permanece con la pantalla encendida, oscuro y sin movimiento durante un número definido de minutos. El acelerómetro define qué cuenta como quieto. Cualquier movimiento detiene esta alarma.",
+      f5_t: "Detección de caída", f5_d: "Usa el acelerómetro para detectar una caída (caída libre seguida de impacto, o solo impacto). El umbral puede calibrarse con una caída simulada. Opcionalmente, la alarma solo puede detenerse con un PIN.",
+      f6_t: "Equipos sin sensor de luz", f6_d: "Si el equipo no tiene sensor de luz, la app lo informa y usa solo el tiempo inactivo con la pantalla bloqueada como disparador. El tiempo es configurable, así que pueden permitirse periodos inactivos más largos.",
+      f7_t: "Sonidos de alarma y vibración", f7_d: "Elige uno o más sonidos de alarma, o añade tus propios archivos de audio. La alarma puede sonar al volumen máximo y vibrar, y puedes apagar el sonido y mantener solo la vibración.",
+      f8_t: "Verificación de permisos", f8_d: "Una pantalla de permisos muestra lo que está correcto y lo que falta: optimización de batería, Bluetooth, ubicación para BLE, micrófono, notificaciones y sensor de luz. También muestra gráficos en vivo de luz, micrófono y movimiento, con valores mínimo, máximo y promedio.",
+      f9_t: "Registro de eventos", f9_d: "Cada evento se guarda en un archivo CSV en el equipo: alarmas, búsquedas, vecinos encontrados, cambios de pantalla y estado. Puedes ver un resumen en la app y compartir el archivo. El archivo tiene un límite de 50 MB; al llegar al límite, se eliminan las líneas más antiguas.",
+      f10_t: "Tres idiomas", f10_d: "La app está disponible en inglés, portugués y español, y el idioma se puede cambiar en los ajustes.",
+      aviso: "Esta es una versión en pruebas. Pruébala en tus equipos antes de depender de ella, y confirma que la alarma, el sonido y la detección de vecinos funcionan como esperas en tu entorno.",
+      req_titulo: "Requisitos",
+      req1: "Android 8.0 (Oreo) o superior.", req2: "Bluetooth Low Energy para la detección de vecinos por BLE.", req3: "Sensor de luz para la detección de oscuridad. Sin él, la app usa el disparador de tiempo inactivo.", req4: "Permisos de Bluetooth (o de ubicación en Android 8 a 11), micrófono para la detección por sonido y notificaciones. La app pide cada uno cuando lo necesita.", req5: "Optimización de batería desactivada para la app, para que el monitoreo siga en segundo plano.",
+      priv_titulo: "Tus datos", priv1: "El registro de eventos y los ajustes se guardan en el equipo.", priv2: "La app no registra lo que se escribe en el teclado ni toma capturas de pantalla.", priv3: "Puedes restaurar los ajustes en cualquier momento con \"Restaurar valores predeterminados de la app\" en la pantalla Acerca de.",
+      inst_titulo: "Instalación", inst_sub: "Instala el APK directamente en el equipo. No está disponible en Play Store. La prueba dura 7 días. Después, la app pide una licencia para el equipo: para comprarla, usa los contactos de abajo.",
+      i1_t: "Descargar", i1_d: "Abre esta página en el equipo y toca el botón de descarga.",
+      i2_t: "Permitir la instalación", i2_d: "Android pide permiso para instalar apps desde esta fuente. Acepta solo para esta descarga.",
+      i3_t: "Abrir e instalar", i3_d: "Abre el archivo descargado en la app Descargas y confirma la instalación.",
+      i4_t: "Conceder permisos", i4_d: "Abre \"Permisos de la APP\" en la app y permite todo lo que aparezca como faltante.",
+      dl_titulo: "¿Listo para probarla?", dl_sub: "Descarga el APK más reciente y pruébalo en tus handhelds.",
+      cont_titulo: "Contacto", cont_sub: "Dudas, sugerencias o solicitudes de soporte:", cont_email: "Correo",
+      rodape: "Hecho para equipos de handhelds que necesitan encontrar dispositivos rápido.", voltar: "Volver arriba"
+    }
+  };
+
+  function aplicarIdioma(lang) {
+    const dicionario = T[lang] || T.en;
+    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const chave = el.getAttribute('data-i18n');
+      if (dicionario[chave] !== undefined) el.textContent = dicionario[chave];
+    });
+    document.querySelectorAll('.idiomas button').forEach(b => {
+      b.classList.toggle('ativo', b.dataset.lang === lang);
+    });
+  }
+
+  document.querySelectorAll('.idiomas button').forEach(b => {
+    b.addEventListener('click', () => aplicarIdioma(b.dataset.lang));
+  });
+
+  aplicarIdioma('en');
+</script>
+</body>
+</html>
