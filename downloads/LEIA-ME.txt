@@ -1,0 +1,7 @@
+Coloque aqui o APK de avaliação com o nome HeyFolks.apk (o link do site aponta para este nome).
+
+Como publicar uma nova versão:
+1. No Android Studio, faça Build > Build APK(s). O APK sai em Compilados/ com o nome HeyFolks-avaliacao_<versão>_expira-<dd-mm-aaaa>.apk.
+2. Confira a data de expiração no nome do arquivo: ela é a data do build + 7 dias.
+3. Copie para esta pasta e renomeie para HeyFolks.apk, substituindo o anterior. Não publique APKs de cliente aqui.
+4. Publique um APK novo todos os dias, para que quem baixar tenha 7 dias a partir do próprio download.
